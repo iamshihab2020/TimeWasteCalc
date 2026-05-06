@@ -5,6 +5,7 @@ import { Settings2, Sparkles, BarChart3, Target, Share2 } from "lucide-react";
 import { ToneToggle } from "./tone-toggle";
 import { ShareButton } from "./share-button";
 import { ThemeToggle } from "./theme-toggle";
+import { InstallPrompt } from "./install-prompt";
 import type { Tone } from "@/lib/tone";
 import type { Activity } from "@/lib/calc";
 
@@ -97,9 +98,10 @@ export function MobileTabBar({
           })}
           <ShareTab disabled={!ready} shareProps={shareProps} />
         </div>
-        <div className="border-t border-rule px-3 py-2 flex justify-center items-center gap-2">
+        <div className="border-t border-rule px-3 py-2 flex justify-center items-center gap-2 flex-wrap">
           <ToneToggle tone={tone} onChange={onToneChange} />
           <ThemeToggle compact />
+          <InstallPrompt />
         </div>
       </nav>
     </>

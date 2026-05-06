@@ -1,36 +1,77 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# TimeWasteCalc
 
-## Getting Started
+> Honest math, soft delivery.
 
-First, run the development server:
+A friendly calculator that turns your daily habits — scrolling, commuting, doom-watching — into the years you'll spend on them. Then it shows you what those years could have been instead.
+
+[Live demo →](https://timewastecalc.com) · No login. No tracking. No data leaves your browser.
+
+---
+
+## What it does
+
+You tell it:
+
+- A habit and how long you do it (per day / week / month / year)
+- Your age, expected lifetime, and how many hours you sleep
+- Optionally, what an hour of your time is worth
+
+It tells you:
+
+- How many **years of remaining waking life** that habit will eat
+- A "**life in weeks**" dot grid (4,160 weeks of an 80-year life), shaded by what you've lived, what's projected to be wasted, and what's still up for grabs
+- **Equivalents** you'll recognize ("≈ 18,993 nights of sleep" / "10,853 flights to Tokyo" / "25,324 novels")
+- **Skills you could pick up instead** — guitar, Spanish, marathons, woodworking — sized against the hours you have
+- A **goal slider** to see what you'd reclaim by cutting back
+- The **opportunity cost in dollars** + what that would compound to invested at 7%
+
+There's a **Cheeky / Kind** tone toggle so the message lands the way you want it to.
+
+## Privacy
+
+- Everything runs in your browser. No accounts, no analytics on your inputs.
+- State is stored in a single opaque base64url URL token (`?s=...`) and `localStorage` on your device.
+- The **Share** button generates a PNG image with only the headline number — no age, sleep, income, or activity names by default. There's a checkbox to opt in.
+- Sharing the URL does include the encoded data so the recipient sees what you saw — that's the trade-off for an interactive link. Share the image instead if you want privacy.
+
+## Tech
+
+- **Next.js 16** (App Router, Turbopack)
+- **TypeScript**, **Tailwind CSS v4**, **Motion** (framer-motion)
+- **Radix UI** primitives, **Recharts** (lazy-loaded), **html-to-image** for share PNGs
+- **nuqs** for URL-as-state
+- Installable as a **PWA**
+
+## Run it locally
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+pnpm install
+pnpm dev          # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Other scripts:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+pnpm build        # production build (typecheck included)
+pnpm start        # serve the production build
+pnpm lint
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Deploy
 
-## Learn More
+One-click on **Vercel** — zero config, Edge runtime is used for the dynamic OpenGraph image (`app/opengraph-image.tsx`); everything else is static.
 
-To learn more about Next.js, take a look at the following resources:
+## Project layout
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```
+app/                 Next.js app router — page, layout, manifest, OG image
+components/          UI (results panel, life grid, share dialog, mobile tab bar, …)
+lib/                 Pure logic — calc.ts, comparisons.ts, presets.ts, share.ts, tone.ts
+hooks/               useAppState (URL + localStorage), useShuffle
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+For architecture notes (state flow, theme system, share-image privacy contract), see [`CLAUDE.md`](./CLAUDE.md).
 
-## Deploy on Vercel
+## License
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+MIT.

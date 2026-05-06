@@ -20,6 +20,7 @@ import { StickyResult } from "@/components/sticky-result";
 import { LifeBar } from "@/components/life-bar";
 import { MobileTabBar } from "@/components/mobile-tab-bar";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { InstallPrompt } from "@/components/install-prompt";
 import { Reveal } from "@/components/reveal";
 import { ScrollProgress } from "@/components/scroll-progress";
 import { ScrollBlobs } from "@/components/scroll-blobs";
@@ -74,6 +75,7 @@ export default function Page() {
           </div>
         </div>
         <div className="hidden sm:flex items-center gap-3">
+          <InstallPrompt />
           <ThemeToggle />
           <ToneToggle tone={tone} onChange={setTone} />
           <ShareButton {...shareProps} />

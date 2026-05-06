@@ -1,8 +1,12 @@
 import type { Metadata, Viewport } from "next";
 import { Bricolage_Grotesque, Manrope, JetBrains_Mono } from "next/font/google";
 import { Suspense } from "react";
+import Script from "next/script";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
+import { RegisterSW } from "@/components/register-sw";
 import "./globals.css";
+
+const themeInitScript = `(function(){try{var k='twc:theme:v1';var t=localStorage.getItem(k);var resolved=(t==='dark'||t==='light')?t:(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',resolved);if(t==='system'||!t){document.documentElement.setAttribute('data-theme-mode','system')}var c=resolved==='dark'?'#10131c':'#FFF8E7';document.querySelectorAll('meta[name=\"theme-color\"]').forEach(function(el){el.setAttribute('content',c)});matchMedia('(prefers-color-scheme: dark)').addEventListener('change',function(e){var stored=localStorage.getItem(k);if(!stored||stored==='system'){var nv=e.matches?'dark':'light';document.documentElement.setAttribute('data-theme',nv);document.querySelectorAll('meta[name=\"theme-color\"]').forEach(function(el){el.setAttribute('content',e.matches?'#10131c':'#FFF8E7')})}})}catch(e){}})();`;
 
 const bricolage = Bricolage_Grotesque({
   variable: "--font-bricolage",
@@ -54,6 +58,9 @@ export const viewport: Viewport = {
   themeColor: "#FFF8E7",
   width: "device-width",
   initialScale: 1,
+  viewportFit: "cover",
+  userScalable: true,
+  maximumScale: 5,
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -63,17 +70,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       className={`${bricolage.variable} ${manrope.variable} ${mono.variable} antialiased`}
       suppressHydrationWarning
     >
-      <head>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `(function(){try{var t=localStorage.getItem('twc:theme:v1');var resolved=(t==='dark'||t==='light')?t:(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',resolved);if(t==='system'||!t){document.documentElement.setAttribute('data-theme-mode','system')}var c=resolved==='dark'?'#10131c':'#FFF8E7';document.querySelectorAll('meta[name=\"theme-color\"]').forEach(function(el){el.setAttribute('content',c)});matchMedia('(prefers-color-scheme: dark)').addEventListener('change',function(e){var stored=localStorage.getItem('twc:theme:v1');if(!stored||stored==='system'){var nv=e.matches?'dark':'light';document.documentElement.setAttribute('data-theme',nv);document.querySelectorAll('meta[name=\"theme-color\"]').forEach(function(el){el.setAttribute('content',e.matches?'#10131c':'#FFF8E7')})}})}catch(e){}})();`,
-          }}
-        />
-      </head>
       <body>
+        <Script id="theme-init" strategy="beforeInteractive">{themeInitScript}</Script>
         <Suspense fallback={null}>
           <NuqsAdapter>{children}</NuqsAdapter>
         </Suspense>
+        <RegisterSW />
       </body>
     </html>
   );
